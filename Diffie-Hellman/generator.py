@@ -17,26 +17,23 @@ def public_prime():
 	pub_key = random.choice(primes)
 	return pub_key
 
-def public_generator():
-	# we need to define a generator in terms of the public prime
-	return 0
 
-def primitive_root(modulo):
-	# create a required set to find coprime numbers to the given prime number
-	required_set = set(num for num in range (1, modulo) if gcd(num, modulo) == 1)
-	for g in range(1, modulo):
-		# then we loop through
-		actual_set = set(pow(g, powers) % modulo for powers in range (1, modulo))
-		if required_set == actual_set:
-			return g
+# def primitive_root(modulo):
+# 	# create a required set to find coprime numbers to the given prime number
+# 	required_set = set(num for num in range (1, modulo) if gcd(num, modulo) == 1)
+# 	for g in range(1, modulo):
+# 		# then we loop through
+# 		actual_set = set(pow(g, powers) % modulo for powers in range (1, modulo))
+# 		if required_set == actual_set:
+# 			return g
 
-def all_primitive_roots(root, prime):
-	roots = []
-	for a in range(1, (prime - 1)):
-		if gcd(a, prime-1) == 1:
-			print("this is the power", pow(root, a))
-			roots.append(pow(root, a))
-	return(roots)
+# def all_primitive_roots(root, prime):
+# 	roots = []
+# 	for a in range(1, (prime - 1)):
+# 		if gcd(a, prime-1) == 1:
+# 			print("this is the power", pow(root, a))
+# 			roots.append(pow(root, a))
+# 	return(roots)
 
 
 def prim_roots(prime):
