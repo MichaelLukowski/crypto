@@ -1,7 +1,6 @@
 import socket
 import time
 import random
-import sievePrimes
 import generator
 
 # establish client socket to listening server
