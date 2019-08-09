@@ -1,5 +1,7 @@
 import sievePrimes
 import random
+import numpy as np
+import decimal
 import math
 import sys
 
@@ -115,3 +117,4 @@ def X25519(k, u):
 
 	return (x_2 * pow(z_2, P - 2, P)) % P
 	
+
