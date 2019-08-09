@@ -1,2 +1,2 @@
 # crypto
-testing out crypto methods
+This is a repo containing simple Diffie Hellman exchange, Elliptic Curve Diffie Hellman (Curve25519), and will soon include Supersingular isogeny Diffie–Hellman key exchange. These Keys are genererated according to the IETF specifications (RFC 2631, and RFC 7748). Once these keys are generated a symmetric cipher like AES-256 or Salsa20 can be used to encrypt messages and used between two parties.
