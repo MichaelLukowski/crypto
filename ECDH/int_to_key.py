@@ -1,7 +1,18 @@
 from bigfloat import *
 import math
 
+
+
 def int_to_byte(key, n):
+	"""
+	We get a very large number from curve25519 ECDH, This usually coresponds to 64 Bytes long
+	Most Ciphers like ChaCha20 that we are using for encoding require a 32 Byte string as a key
+	This function is a NIST approved mapping of integer to a n-byte string
+
+	https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-56Ar3.pdf
+	Appendix C
+		C.1 Integer-to-Byte String Conversion
+	"""
 	# this is for converting our final key integer into a n byte string key
 	if 2**(8*n) < key:
 		print("this num is too big")
@@ -12,6 +23,7 @@ def int_to_byte(key, n):
 	while i > 1:
 		# 2.1 Ji = (Ji+1)/256
 		Ji = floor(BigFloat(Ji1/256, context=precision(10000)))
+		# as of right now Ji can be incorrect due to floating point precision being not good enough for consistant calculations
 
 		# 2.2Ai = Ji+1 − (Ji• 256)
 		Ai = Ji1 - (Ji * 256)
