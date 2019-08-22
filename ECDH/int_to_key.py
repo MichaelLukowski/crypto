@@ -1,4 +1,4 @@
-from bigfloat import *
+# from bigfloat import *
 import math
 
 
@@ -14,53 +14,40 @@ def int_to_byte(key, n):
 		C.1 Integer-to-Byte String Conversion
 	"""
 	# this is for converting our final key integer into a n byte string key
-	if 2**(8*n) < key:
-		print("this num is too big")
+
 	Jn1 = key
 	i = n
 	Ji1 = Jn1
 	S = []
-	while i > 1:
+	while i > 0:
 		# 2.1 Ji = (Ji+1)/256
-		Ji = floor(BigFloat(Ji1/256, context=precision(10000)))
-		# as of right now Ji can be incorrect due to floating point precision being not good enough for consistant calculations
+		Ji = Ji1//256
 
 		# 2.2Ai = Ji+1 − (Ji• 256)
 		Ai = Ji1 - (Ji * 256)
-		
-		Ai = int(Ai)
-
-		print("Ji+1: ", Ji1)
-		print("Ji * 256: ", Ji * 256)
-		print("mod thing: ", Ji1 % 256)
-		print("Ji: ", Ji)
-		print("Ai: ", Ai)
-
-		if Ai < 0:
-			print("no idea how we got a negative on this one???")
-			Ai = abs(Ai)
 
 		# Si= (ai1, ai2, ai3, ai4, ai5, ai6, ai7, ai8)
 		Si = []
-
-
-		for a in "{0:b}".format(Ai)[-8:]:
+		for a in "{0:b}".format(Ai):
 			Si.append(int(a))
+		while len(Si) != 8:
+			Si.insert(0,0)
 		S.append(Si)
 
 		Ji1 = Ji
 		i -= 1 
 
+	# now we convert binary representations of numbers into hex and append them to a string to return 
 	bStr = ""
 	for ele in S:
 		temp = ""
 		for i in ele:
 			temp += str(i)
-		bStr += hex(int(temp, 2))[-2:]
-		# for i in ele:
-		# 	bStr += str(i)
-	print(bStr)
+
+		hexConv = str(hex(int(temp, 2)))
+		hexConv = hexConv.replace("x", "0")
+		bStr += hexConv[-2:]
+		
 	hexKey = bStr
-	# hexKey = hex(int(bStr, 2))
 	
-	return hexKey
+	return hexKey.encode("utf8")

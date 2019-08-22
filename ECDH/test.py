@@ -18,14 +18,14 @@ alice_private_key = random.randint(3 , alice.order-1)
 print("\nBob's Private Key: ")
 print(hex(bob_private_key))
 
-bob_public_key = X25519(bob_private_key, 9)
+bob_public_key = X25519(bob_private_key, bob.gX)
 print("\nBob's Public Key: ")
 print(hex(bob_public_key))
 
 print("\nAlice's Private Key: ")
 print(hex(alice_private_key))
 
-alice_public_key = X25519(alice_private_key, 9)
+alice_public_key = X25519(alice_private_key, alice.gX)
 print("\nAlice's Public Key: ")
 print(hex(alice_public_key))
 
@@ -37,19 +37,19 @@ print(hex(bob_calculated_secret))
 print(hex(alice_calculated_secret))
 print("\n")
 
-print(int_to_byte(bob_calculated_secret, 32))
 
-# something = base64.b64encode(str(hex(bob_calculated_secret)).encode())
-# print(something)
-# print("this is the length", sys.getsizeof(base64.b64encode(bob_calculated_secret.to_bytes(32, byteorder="little"))))
+if bob_calculated_secret != alice_calculated_secret:
+	print("something very wrong has happened with these keys")
+
 print("\nNow that we have the same secret we are going to encrypt using ChaCha20")
-
-
 message = "I wonder if this requires some special length"
 message = message.encode()
 
 
-cipher = ChaCha20.new(key=str.encode(hex(bob_calculated_secret)[2:34]))
+# Conversion of 64 length key to 32 length key
+bob_byteLimitKey = int_to_byte(bob_calculated_secret, 16)
+
+cipher = ChaCha20.new(key=bob_byteLimitKey)
 # obj = AES.new(hex(bob_calculated_secret), AES.MODE_CBC, "This is an IV446")
 
 cipherText = cipher.encrypt(message)
@@ -63,7 +63,8 @@ try:
 	b64 = json.loads(result)
 	nonce = b64decode(b64['nonce'])
 	cipherText = b64decode(b64['cipherText'])
-	newCipher = ChaCha20.new(key=str.encode(hex(alice_calculated_secret)[2:34]), nonce=nonce)
+	alice_byteLimitKey = int_to_byte(alice_calculated_secret, 16)
+	newCipher = ChaCha20.new(key=alice_byteLimitKey, nonce=nonce)
 	plaintext = newCipher.decrypt(cipherText)
 	print("the message was: ", plaintext.decode())
 except:
