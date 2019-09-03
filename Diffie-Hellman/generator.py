@@ -40,12 +40,17 @@ def prim_roots(prime):
 	roots = []
 
 	for r in range(2, prime):
+		# for r in range from 2 to prime p
 		a = 1
+
+		# k = r mod prime
 		k = r % prime
 		while k > 1:
+			# loop until k <= 1 and do k = (k *r) mod p
 			a += 1
 			k = k * r
 			k = k % prime
+		# if a has Multiplicative order p - 1 then it is a primative root mod p
 		if a == (prime -1):
 			roots.append(r)
 
