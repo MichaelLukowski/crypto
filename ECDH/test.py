@@ -6,6 +6,7 @@ from base64 import b64encode, b64decode
 import json
 from Crypto.Cipher import ChaCha20
 import random
+from cypher import encode_chacha20, decode_chacha20
 
 # testing of the 
 bob = ecdhSystem()
@@ -42,31 +43,20 @@ if bob_calculated_secret != alice_calculated_secret:
 	print("something very wrong has happened with these keys")
 
 print("\nNow that we have the same secret we are going to encrypt using ChaCha20")
-message = "I wonder if this requires some special length"
-message = message.encode()
+message = "this is a really secret message!!"
+
 
 
 # Conversion of 64 length key to 32 length key
 bob_byteLimitKey = int_to_byte(bob_calculated_secret, 16)
+alice_byteLimitKey = int_to_byte(alice_calculated_secret, 16)
 
-cipher = ChaCha20.new(key=bob_byteLimitKey)
-# obj = AES.new(hex(bob_calculated_secret), AES.MODE_CBC, "This is an IV446")
 
-cipherText = cipher.encrypt(message)
+encoded = encode_chacha20(bob_byteLimitKey, message)
+print(encoded)
 
-nonce = b64encode(cipher.nonce).decode('utf-8')
-ct = b64encode(cipherText).decode('utf-8')
-result = json.dumps({'nonce':nonce, 'cipherText':ct})
-print(result)
+decoded = decode_chacha20(alice_byteLimitKey, encoded)
 
-try:
-	b64 = json.loads(result)
-	nonce = b64decode(b64['nonce'])
-	cipherText = b64decode(b64['cipherText'])
-	alice_byteLimitKey = int_to_byte(alice_calculated_secret, 16)
-	newCipher = ChaCha20.new(key=alice_byteLimitKey, nonce=nonce)
-	plaintext = newCipher.decrypt(cipherText)
-	print("the message was: ", plaintext.decode())
-except:
-    print("Incorrect decryption")
+print("this is the decoded message:")
+print(decoded)
 
